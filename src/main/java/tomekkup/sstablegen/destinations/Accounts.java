@@ -38,9 +38,4 @@ public class Accounts extends AbstractSSTableDestination {
     AbstractType<?> getSubComparatorType() {
         return null;
     }
-
-    @Override
-    String getDirectory() {
-        return "G:\\generated\\test\\Accounts\\";
-    }
 }

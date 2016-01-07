@@ -1,35 +1,73 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.kuprowski</groupId>
-  <artifactId>sstable-fake-generator</artifactId>
-  <version>1.0-SNAPSHOT</version>
-  <packaging>jar</packaging>
+    <groupId>com.kuprowski</groupId>
+    <artifactId>sstable-fake-generator</artifactId>
+    <version>2.2.3</version>
+    <packaging>jar</packaging>
 
-  <name>sstable-fake-generator</name>
-  <url>http://maven.apache.org</url>
+    <name>sstable-fake-generator</name>
+    <developers>
+        <developer>
+            <id>tomekkup</id>
+            <name>Tomek Kuprowski</name>
+            <email>tomekkuprowski@gmail.com</email>
+        </developer>        
+    </developers>
+    <inceptionYear>2012</inceptionYear>
+    <url>https://github.com/tomekkup/sstable-fake-generator/</url>
+    <issueManagement>
+        <url>https://github.com/tomekkup/sstable-fake-generator/issues</url>
+        <system>GitHub Issues</system>
+    </issueManagement>
+    
+    <licenses>
+        <license>
+            <name>GPL ver 2</name>
+            <url>http://www.gnu.org/licences/gpl.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.plugin.compiler.version>2.5.1</maven.plugin.compiler.version>
+        <maven.plugin.dependency.version>2.4</maven.plugin.dependency.version>
+        <maven.plugin.resources.version>2.4.3</maven.plugin.resources.version>
+        <maven.plugin.exec.version>1.2.1</maven.plugin.exec.version>
+        <maven.plugin.tomcat7.version>2.0-beta-1</maven.plugin.tomcat7.version>
+        <maven.plugin.surefire.version>2.12</maven.plugin.surefire.version>
+        <maven.plugin.clean.version>2.5</maven.plugin.clean.version>
+        <maven.plugin.install.version>2.3.1</maven.plugin.install.version>
+        <maven.plugin.site.version>3.1</maven.plugin.site.version>
+        <maven.plugin.war.version>2.2</maven.plugin.war.version>
+        <maven.plugin.source.version>2.1.2</maven.plugin.source.version>
+        <maven.plugin.antrun.version>1.7</maven.plugin.antrun.version>
+        <cassandra.version>2.2.3</cassandra.version>
+    </properties>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
-
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.fluttercode.datafactory</groupId>
-      <artifactId>datafactory</artifactId>
-      <version>0.8</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.cassandra</groupId>
-      <artifactId>cassandra-all</artifactId>
-      <version>1.1.6</version>
-    </dependency>
-  </dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.fluttercode.datafactory</groupId>
+            <artifactId>datafactory</artifactId>
+            <version>0.8</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cassandra</groupId>
+            <artifactId>cassandra-all</artifactId>
+            <version>${cassandra.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>1.3.2</version>
+        </dependency>
+    </dependencies>
 </project>

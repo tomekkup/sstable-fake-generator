@@ -36,9 +36,14 @@ public class DistributorJob {
             throw new IllegalStateException("not ready yet");
         }
         
+        int progress = -1;
         Logger.getLogger(App.class.getName()).log(Level.SEVERE, "Generating : " + this.amount);
         for (int i = 0; i < this.amount; i++) {
-            Logger.getLogger(App.class.getName()).log(Level.SEVERE, i + "");
+            int currentProgress = i * 100 / amount;
+            if (currentProgress > progress) {
+                progress = currentProgress;
+                System.out.println(progress + "%");
+            }
             Object source = sourceBuilder.get();
             Iterator<Destination> destIter = destinations.iterator();
             while (destIter.hasNext()) {

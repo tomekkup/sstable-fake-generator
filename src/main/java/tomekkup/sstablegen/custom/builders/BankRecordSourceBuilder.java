@@ -6,7 +6,6 @@ import tomekkup.sstablegen.custom.DowodGenerator;
 import tomekkup.sstablegen.custom.IBANGenerator;
 import tomekkup.sstablegen.model.CassandraColumn;
 import tomekkup.sstablegen.model.StandardNoSqlRecord;
-import tomekkup.sstablegen.model.SuperNoSqlRecord;
 import tomekkup.sstablegen.natives.BankRecord;
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,14 +31,14 @@ public class BankRecordSourceBuilder extends AbstractSourceBuilder {
         return record;
     }
 
-    private List<SuperNoSqlRecord> prepareHistory(BankRecord record) {
-        List<SuperNoSqlRecord> history = new ArrayList<SuperNoSqlRecord>();
+    private List<StandardNoSqlRecord> prepareHistory(BankRecord record) {
+        List<StandardNoSqlRecord> history = new ArrayList<StandardNoSqlRecord>();
 
         Iterator<StandardNoSqlRecord> accIter = record.getAccounts().iterator();
         while (accIter.hasNext()) {
             StandardNoSqlRecord account = accIter.next();
             int histCnt = df.getNumberBetween(10, 50);
-            SuperNoSqlRecord hist = new SuperNoSqlRecord(account.getKey());
+            StandardNoSqlRecord hist = new StandardNoSqlRecord(account.getKey());
             
             Date openDate = new Date(account.getColumns().get("open_date").getValue());
             String recStat = account.getColumns().get("stat").getValue();
@@ -103,20 +102,19 @@ public class BankRecordSourceBuilder extends AbstractSourceBuilder {
 
     private StandardNoSqlRecord prepareCustomer() {
         StandardNoSqlRecord customer = new StandardNoSqlRecord();
-
+        String id = CiFGenerator.get();
+        customer.setKey(id);
+        customer.addColumn("ID", new CassandraColumn(id));
         customer.addColumn("firstname", new CassandraColumn(df.getFirstName()));
         customer.addColumn("lastname", new CassandraColumn(df.getLastName()));
         customer.addColumn("address_line", new CassandraColumn(df.getAddress()));
         customer.addColumn("address_line2", new CassandraColumn(df.getAddressLine2()));
         customer.addColumn("city", new CassandraColumn(df.getCity()));
-        customer.addColumn("email", new CassandraColumn(df.getEmailAddress()));
-        customer.addColumn("birthDate", new CassandraColumn(df.getBirthDate().toString()));
-        customer.addColumn("ID", new CassandraColumn(DowodGenerator.get()));
         customer.addColumn("maker", new CassandraColumn(df.getRandomChars(8)));
         customer.addColumn("checker", new CassandraColumn(df.getRandomChars(8)));
         customer.addColumn("creationDate", new CassandraColumn(String.valueOf(System.currentTimeMillis())));
-
-        customer.setKey(CiFGenerator.get());
+        customer.addColumn("email", new CassandraColumn(df.getEmailAddress()));
+        customer.addColumn("birthDate", new CassandraColumn(df.getBirthDate().toString()));
 
         return customer;
     }

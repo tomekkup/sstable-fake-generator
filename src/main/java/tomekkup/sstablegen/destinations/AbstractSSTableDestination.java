@@ -4,17 +4,23 @@ import tomekkup.sstablegen.model.AbstractNoSqlRecord;
 import tomekkup.sstablegen.model.CassandraColumn;
 import tomekkup.sstablegen.model.NoSqlRecord;
 import tomekkup.sstablegen.model.StandardNoSqlRecord;
-import tomekkup.sstablegen.model.SuperNoSqlRecord;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.apache.cassandra.db.marshal.AbstractType;
+import org.apache.cassandra.dht.Murmur3Partitioner;
 import org.apache.cassandra.dht.RandomPartitioner;
-import org.apache.cassandra.io.sstable.SSTableSimpleUnsortedWriter;
+import org.apache.cassandra.io.sstable.CQLSSTableWriter;
+import org.apache.cassandra.io.util.FileUtils;
 import static org.apache.cassandra.utils.ByteBufferUtil.bytes;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.ClassUtils;
 
 
 /**
@@ -23,14 +29,27 @@ import static org.apache.cassandra.utils.ByteBufferUtil.bytes;
  */
 public abstract class AbstractSSTableDestination implements Destination {
 
-    protected SSTableSimpleUnsortedWriter writer;
-
+    protected CQLSSTableWriter.Builder builder = CQLSSTableWriter.builder();
+    protected CQLSSTableWriter writer;
+    protected String schema;
+    protected String insert;
+    
     public AbstractSSTableDestination() throws IOException {
         super();
-        writer =  new SSTableSimpleUnsortedWriter(new File(getDirectory()), new RandomPartitioner(), "bank", getColumnFamily(), getComparatorType(), getSubComparatorType(), 64 );
+        String dir = "banking" + File.separator + getColumnFamily();
+        FileUtils.createDirectory(dir);
+        initResources();
+        builder.inDirectory(dir).forTable(schema).using(insert).withPartitioner(new Murmur3Partitioner());
+        writer = builder.build();
     }
     
-    abstract String getDirectory();
+    private void initResources() throws IOException {
+        InputStream schemais = AbstractSSTableDestination.class.getResourceAsStream("/" + getColumnFamily().toLowerCase() + "-schema.cql");
+        InputStream insertis = AbstractSSTableDestination.class.getResourceAsStream("/" + getColumnFamily().toLowerCase() + "-insert.cql");
+        
+        schema = IOUtils.toString(schemais);
+        insert = IOUtils.toString(insertis);
+    }
     
     abstract String getColumnFamily();
     
@@ -44,17 +63,7 @@ public abstract class AbstractSSTableDestination implements Destination {
         while (keyIter.hasNext()) {
             NoSqlRecord record = keyIter.next();
             
-            ByteBuffer key = bytes(record.getKey());
-            writer.newRow(key);
-            if (record instanceof StandardNoSqlRecord) {
-                writeStandardColumns(record);
-            } else {
-                if (record instanceof SuperNoSqlRecord) {
-                    writeSuperColumns(record);
-                } else {
-                    throw new IllegalStateException("NIE DZIALAM");
-                }
-            }
+            writeStandardColumns(record);
         }
     }
     
@@ -62,28 +71,17 @@ public abstract class AbstractSSTableDestination implements Destination {
         StandardNoSqlRecord record = (StandardNoSqlRecord)obj;
         
         Iterator<CassandraColumn> colIter = record.getColumns().values().iterator();
-        while (colIter.hasNext()) {
-            this.writeSingleColumn(colIter.next());
-        }
+        writer.addRow(toMap(colIter));
     }
     
-    public void writeSuperColumns(Object obj) throws IOException {
-        SuperNoSqlRecord record = (SuperNoSqlRecord)obj;
-        Iterator<Map.Entry<String,List<CassandraColumn>>> iter = record.getColumns().entrySet().iterator();
-        
-        while(iter.hasNext()) {
-            Map.Entry<String,List<CassandraColumn>> superRow = iter.next();
-            writer.newSuperColumn(getBytesValue(superRow.getKey()));
-            Iterator<CassandraColumn> colIter = superRow.getValue().iterator();
-            while (colIter.hasNext()) {
-                CassandraColumn col = colIter.next();
-                this.writeSingleColumn(col);
-            }
+    protected List<Object> toMap(Iterator<CassandraColumn> iter) {
+        List<Object> map = new ArrayList<Object>();
+        while (iter.hasNext()) {
+            CassandraColumn col = iter.next();
+            map.add(col.getValue());
         }
-    }
-
-    protected void writeSingleColumn(CassandraColumn col) throws IOException {
-        writer.addColumn(bytes(col.getName()), bytes(col.getValue()),col.getTimestamp());
+        
+        return map;
     }
     
     protected ByteBuffer getBytesValue(String val) {

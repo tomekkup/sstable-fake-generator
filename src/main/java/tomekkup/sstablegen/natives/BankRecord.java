@@ -1,7 +1,6 @@
 package tomekkup.sstablegen.natives;
 
 import tomekkup.sstablegen.model.StandardNoSqlRecord;
-import tomekkup.sstablegen.model.SuperNoSqlRecord;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +8,7 @@ public class BankRecord {
 
     private StandardNoSqlRecord customer = new StandardNoSqlRecord();
     private List<StandardNoSqlRecord> accounts = new ArrayList<StandardNoSqlRecord>();
-    private List<SuperNoSqlRecord> history = new ArrayList<SuperNoSqlRecord>();
+    private List<StandardNoSqlRecord> history = new ArrayList<StandardNoSqlRecord>();
     
     public BankRecord() {
     }
@@ -30,11 +29,11 @@ public class BankRecord {
         return accounts;
     }
 
-    public List<SuperNoSqlRecord> getHistory() {
+    public List<StandardNoSqlRecord> getHistory() {
         return history;
     }
 
-    public void setHistory(List<SuperNoSqlRecord> history) {
+    public void setHistory(List<StandardNoSqlRecord> history) {
         this.history = history;
     }
     

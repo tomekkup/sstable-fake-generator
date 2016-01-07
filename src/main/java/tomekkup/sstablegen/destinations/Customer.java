@@ -28,11 +28,6 @@ public class Customer extends AbstractSSTableDestination {
     }
 
     @Override
-    String getDirectory() {
-        return "G:\\generated\\test\\Customers\\";
-    }
-
-    @Override
     String getColumnFamily() {
         return "Customers";
     }

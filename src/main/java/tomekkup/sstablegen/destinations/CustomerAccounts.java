@@ -24,18 +24,15 @@ public class CustomerAccounts extends AbstractSSTableDestination {
         BankRecord record = (BankRecord) source;
         
         List<StandardNoSqlRecord> records = new ArrayList<StandardNoSqlRecord>();
-        StandardNoSqlRecord custAcc = new StandardNoSqlRecord(record.getCustomer().getKey());
+        
         for (StandardNoSqlRecord acc : record.getAccounts()) {
-            custAcc.addColumn(acc.getKey(), new CassandraColumn(""));
+            StandardNoSqlRecord custAcc = new StandardNoSqlRecord();
+            custAcc.addColumn("cif", new CassandraColumn(record.getCustomer().getKey()));
+            custAcc.addColumn("account_number", new CassandraColumn(acc.getKey()));
+            records.add(custAcc);
         }
         
-        records.add(custAcc);
         return records;
-    }
-
-    @Override
-    String getDirectory() {
-        return "G:\\generated\\test\\CustomerAccounts\\";
     }
 
     @Override
