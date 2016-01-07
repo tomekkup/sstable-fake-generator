@@ -1,16 +1,19 @@
 package tomekkup.sstablegen.destinations;
 
-import tomekkup.sstablegen.model.StandardNoSqlRecord;
-import tomekkup.sstablegen.natives.BankRecord;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.cassandra.db.marshal.AbstractType;
-import org.apache.cassandra.db.marshal.UTF8Type;
+import tomekkup.sstablegen.model.StandardNoSqlRecord;
+import tomekkup.sstablegen.natives.BankRecord;
 
 /**
+ * ********************************************************
+ * Copyright: 2012 Tomek Kuprowski
  *
- * @author tomek
+ * License: GPLv2: http://www.gnu.org/licences/gpl.html
+ *
+ * @author Tomek Kuprowski (tomekkuprowski at gmail dot com)
+ * *******************************************************
  */
 public class Customer extends AbstractSSTableDestination {
 
@@ -21,7 +24,7 @@ public class Customer extends AbstractSSTableDestination {
     @Override
     List<StandardNoSqlRecord> createData(Object source) {
         BankRecord record = (BankRecord) source;
-        
+
         List<StandardNoSqlRecord> ret = new ArrayList<StandardNoSqlRecord>(1);
         ret.add(record.getCustomer());
         return ret;
@@ -31,15 +34,4 @@ public class Customer extends AbstractSSTableDestination {
     String getColumnFamily() {
         return "Customers";
     }
-
-    @Override
-    AbstractType<?> getComparatorType() {
-        return UTF8Type.instance;
-    }
-
-    @Override
-    AbstractType<?> getSubComparatorType() {
-        return null;
-    }
-    
 }

@@ -1,8 +1,13 @@
 package tomekkup.sstablegen.model;
 
 /**
+ * ********************************************************
+ * Copyright: 2012 Tomek Kuprowski
  *
- * @author tomek
+ * License: GPLv2: http://www.gnu.org/licences/gpl.html
+ *
+ * @author Tomek Kuprowski (tomekkuprowski at gmail dot com)
+ * *******************************************************
  */
 public class CassandraColumn {
 
@@ -15,7 +20,7 @@ public class CassandraColumn {
         setTimestamp(System.currentTimeMillis());
         setMarkedForDelete(false);
     }
-    
+
     public CassandraColumn(String value) {
         this();
         setValue(value);
@@ -58,6 +63,4 @@ public class CassandraColumn {
     public void setMarkedForDelete(boolean markedForDelete) {
         this.markedForDelete = markedForDelete;
     }
-    
-    
 }

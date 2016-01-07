@@ -9,6 +9,15 @@ import tomekkup.sstablegen.destinations.CustomerByID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * ********************************************************
+ * Copyright: 2012 Tomek Kuprowski
+ *
+ * License: GPLv2: http://www.gnu.org/licences/gpl.html
+ *
+ * @author Tomek Kuprowski (tomekkuprowski at gmail dot com)
+ * *******************************************************
+ */
 public class App {
 
     public static void main(String[] args) {
@@ -27,6 +36,6 @@ public class App {
             System.exit(1);
         }
         System.exit(0);
-            
+
     }
 }

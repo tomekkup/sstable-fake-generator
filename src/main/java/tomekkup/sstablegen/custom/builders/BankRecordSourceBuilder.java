@@ -2,7 +2,6 @@ package tomekkup.sstablegen.custom.builders;
 
 import tomekkup.sstablegen.custom.CiFGenerator;
 import tomekkup.sstablegen.custom.CurrencyGenerator;
-import tomekkup.sstablegen.custom.DowodGenerator;
 import tomekkup.sstablegen.custom.IBANGenerator;
 import tomekkup.sstablegen.model.CassandraColumn;
 import tomekkup.sstablegen.model.StandardNoSqlRecord;
@@ -14,8 +13,13 @@ import java.util.List;
 import java.util.UUID;
 
 /**
+ * ********************************************************
+ * Copyright: 2012 Tomek Kuprowski
  *
- * @author tomek
+ * License: GPLv2: http://www.gnu.org/licences/gpl.html
+ *
+ * @author Tomek Kuprowski (tomekkuprowski at gmail dot com)
+ * *******************************************************
  */
 public class BankRecordSourceBuilder extends AbstractSourceBuilder {
 
@@ -39,26 +43,26 @@ public class BankRecordSourceBuilder extends AbstractSourceBuilder {
             StandardNoSqlRecord account = accIter.next();
             int histCnt = df.getNumberBetween(10, 50);
             StandardNoSqlRecord hist = new StandardNoSqlRecord(account.getKey());
-            
+
             Date openDate = new Date(account.getColumns().get("open_date").getValue());
             String recStat = account.getColumns().get("stat").getValue();
             Date closeDate = new Date();
             if (recStat == "C") {
                 closeDate = new Date(account.getColumns().get("close_date").getValue());
             }
-            
+
             int lastBalance = 10000;
             for (int i = 0; i < histCnt; i++) {
                 Date recordDate = df.getDateBetween(openDate, closeDate);
-                String sColName = recordDate.getTime()+"";
+                String sColName = recordDate.getTime() + "";
                 boolean credit = rand.nextBoolean();
                 int amount = df.getNumberBetween(10, 10000);
                 amount = amount * (credit ? -1 : 1);
                 lastBalance += amount;
-                
+
                 hist.addColumn(sColName, new CassandraColumn("type", credit ? "C" : "B"));
-                hist.addColumn(sColName, new CassandraColumn("balance", ""+lastBalance));
-                hist.addColumn(sColName, new CassandraColumn("amount", ""+amount));
+                hist.addColumn(sColName, new CassandraColumn("balance", "" + lastBalance));
+                hist.addColumn(sColName, new CassandraColumn("amount", "" + amount));
                 hist.addColumn(sColName, new CassandraColumn("currency", account.getColumns().get("limit_ccy").getValue()));
                 hist.addColumn(sColName, new CassandraColumn("stmt_date", recordDate.toGMTString()));
                 hist.addColumn(sColName, new CassandraColumn("trn_ref_no", UUID.randomUUID().toString()));

@@ -5,8 +5,13 @@ import java.util.Random;
 import org.fluttercode.datafactory.impl.DataFactory;
 
 /**
+ * ********************************************************
+ * Copyright: 2012 Tomek Kuprowski
  *
- * @author tomek
+ * License: GPLv2: http://www.gnu.org/licences/gpl.html
+ *
+ * @author Tomek Kuprowski (tomekkuprowski at gmail dot com)
+ * *******************************************************
  */
 public abstract class AbstractSourceBuilder implements SourceBuilder {
 

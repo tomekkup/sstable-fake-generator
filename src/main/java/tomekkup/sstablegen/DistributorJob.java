@@ -10,32 +10,37 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * ********************************************************
+ * Copyright: 2012 Tomek Kuprowski
  *
- * @author tomek
+ * License: GPLv2: http://www.gnu.org/licences/gpl.html
+ *
+ * @author Tomek Kuprowski (tomekkuprowski at gmail dot com)
+ * *******************************************************
  */
 public class DistributorJob {
-    
+
     private int amount = 2;
     private Set<Destination> destinations = new HashSet<Destination>();
     private SourceBuilder sourceBuilder;
-    
+
     public DistributorJob(int amount) throws Exception {
         this.amount = amount;
     }
-    
+
     public void addDestination(Destination destination) {
         destinations.add(destination);
     }
-    
+
     public void registerSourceBuilder(SourceBuilder builder) {
         this.sourceBuilder = builder;
     }
-    
+
     public void go() throws IOException {
         if (sourceBuilder == null) {
             throw new IllegalStateException("not ready yet");
         }
-        
+
         int progress = -1;
         Logger.getLogger(App.class.getName()).log(Level.SEVERE, "Generating : " + this.amount);
         for (int i = 0; i < this.amount; i++) {
@@ -50,7 +55,7 @@ public class DistributorJob {
                 destIter.next().handle(source);
             }
         }
-        
+
         Iterator<Destination> destIter = destinations.iterator();
         while (destIter.hasNext()) {
             destIter.next().close();
