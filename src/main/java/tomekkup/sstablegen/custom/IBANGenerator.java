@@ -1,5 +1,7 @@
 package tomekkup.sstablegen.custom;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * ********************************************************
  * Copyright: 2012 Tomek Kuprowski
@@ -18,10 +20,14 @@ public class IBANGenerator {
         String nr2 = bban + "252100";
         int modulo = 0;
         for (char znak : nr2.toCharArray()) {
-            modulo = (10 * modulo + Integer.parseInt("" + znak)) % 97;
+            modulo = (10 * modulo + Integer.parseInt(String.valueOf(znak))) % 97;
         }
         modulo = 98 - modulo;
 
-        return countryCode + String.format("%02d", modulo) + bankCode + bban;
+        StringBuilder sb = new StringBuilder(countryCode);
+        sb.append(StringUtils.leftPad(String.valueOf(modulo), 2, '0'));
+        sb.append(bankCode);
+        sb.append(bban);
+        return sb.toString();
     }
 }

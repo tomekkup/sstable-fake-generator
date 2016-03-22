@@ -22,7 +22,7 @@ public class App {
 
     public static void main(String[] args) {
         try {
-            DistributorJob job = new DistributorJob(5000);
+            DistributorJob job = new DistributorJob(10000000);
             job.registerSourceBuilder(new BankRecordSourceBuilder());
             job.addDestination(new Customer());
             job.addDestination(new Accounts());

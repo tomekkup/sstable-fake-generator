@@ -1,5 +1,7 @@
 package tomekkup.sstablegen.custom;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * ********************************************************
  * Copyright: 2012 Tomek Kuprowski
@@ -11,6 +13,8 @@ package tomekkup.sstablegen.custom;
  */
 public class DowodGenerator {
 
+    private static final char zero = '0';
+    
     public static String get() {
         int wagi[] = new int[]{7, 3, 1, 7, 3, 1, 7, 3};
 
@@ -19,7 +23,7 @@ public class DowodGenerator {
         int lit3 = (int) (Math.random() * 25 + 10);
         int nbr = (int) (Math.random() * 99999 + 1);
 
-        char[] nbrAsch = String.format("%05d", nbr).toCharArray();
+        char[] nbrAsch = StringUtils.leftPad(String.valueOf(nbr), 5, zero).toCharArray();
         int sumaKontrolna = wagi[0] * lit1 + wagi[1] * lit2 + wagi[2] * lit3;
         for (int i = 3; i < wagi.length; i++) {
             final int parseInt = Integer.parseInt("" + nbrAsch[i - 3]);

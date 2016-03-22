@@ -44,7 +44,7 @@
         <maven.plugin.war.version>2.2</maven.plugin.war.version>
         <maven.plugin.source.version>2.1.2</maven.plugin.source.version>
         <maven.plugin.antrun.version>1.7</maven.plugin.antrun.version>
-        <cassandra.version>2.2.3</cassandra.version>
+        <cassandra.version>3.0.0</cassandra.version>
     </properties>
 
     <dependencies>
@@ -78,8 +78,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven.plugin.compiler.version}</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>

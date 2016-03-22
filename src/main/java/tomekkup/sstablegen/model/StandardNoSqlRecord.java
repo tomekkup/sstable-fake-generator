@@ -1,6 +1,7 @@
 package tomekkup.sstablegen.model;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -14,7 +15,7 @@ import java.util.Map;
  */
 public class StandardNoSqlRecord extends AbstractNoSqlRecord {
 
-    private Map<String, CassandraColumn> columns = new HashMap<String, CassandraColumn>();
+    private Map<String, CassandraColumn> columns = new LinkedHashMap<String, CassandraColumn>();
 
     public StandardNoSqlRecord() {
         super();

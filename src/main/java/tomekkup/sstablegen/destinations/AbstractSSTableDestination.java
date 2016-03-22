@@ -35,10 +35,10 @@ public abstract class AbstractSSTableDestination implements Destination {
 
     public AbstractSSTableDestination() throws IOException {
         super();
-        String dir = "banking" + File.separator + getColumnFamily();
+        String dir = "banking" + File.separator + getColumnFamily().toLowerCase();
         FileUtils.createDirectory(dir);
         initResources();
-        builder.inDirectory(dir).forTable(schema).using(insert).withPartitioner(new Murmur3Partitioner());
+        builder.inDirectory(dir).withBufferSizeInMB(16).forTable(schema).using(insert).withPartitioner(new Murmur3Partitioner());
         writer = builder.build();
     }
 
@@ -52,6 +52,7 @@ public abstract class AbstractSSTableDestination implements Destination {
 
     abstract String getColumnFamily();
 
+    @Override
     public void handle(Object source) throws IOException {
         List<AbstractNoSqlRecord> nsr = createData(source);
         Iterator<AbstractNoSqlRecord> keyIter = nsr.iterator();
@@ -90,6 +91,7 @@ public abstract class AbstractSSTableDestination implements Destination {
         return isNumeric ? bytes(numeric) : bytes(val);
     }
 
+    @Override
     public void close() throws IOException {
         writer.close();
     }

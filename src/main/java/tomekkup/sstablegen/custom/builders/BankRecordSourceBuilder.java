@@ -47,7 +47,7 @@ public class BankRecordSourceBuilder extends AbstractSourceBuilder {
             Date openDate = new Date(account.getColumns().get("open_date").getValue());
             String recStat = account.getColumns().get("stat").getValue();
             Date closeDate = new Date();
-            if (recStat == "C") {
+            if ("C".equals(recStat)) {
                 closeDate = new Date(account.getColumns().get("close_date").getValue());
             }
 
@@ -59,15 +59,17 @@ public class BankRecordSourceBuilder extends AbstractSourceBuilder {
                 int amount = df.getNumberBetween(10, 10000);
                 amount = amount * (credit ? -1 : 1);
                 lastBalance += amount;
-
-                hist.addColumn(sColName, new CassandraColumn("type", credit ? "C" : "B"));
-                hist.addColumn(sColName, new CassandraColumn("balance", "" + lastBalance));
-                hist.addColumn(sColName, new CassandraColumn("amount", "" + amount));
-                hist.addColumn(sColName, new CassandraColumn("currency", account.getColumns().get("limit_ccy").getValue()));
-                hist.addColumn(sColName, new CassandraColumn("stmt_date", recordDate.toGMTString()));
-                hist.addColumn(sColName, new CassandraColumn("trn_ref_no", UUID.randomUUID().toString()));
-                hist.addColumn(sColName, new CassandraColumn("ctpty_no", IBANGenerator.get(df.getNumberText(16))));
-                hist.addColumn(sColName, new CassandraColumn("ctpty_name", df.getName()));
+                
+                hist.addColumn("account_number", new CassandraColumn(account.getKey()));
+                hist.addColumn("idxnum", new CassandraColumn(i + ""));
+                hist.addColumn("type", new CassandraColumn(credit ? "C" : "B"));
+                hist.addColumn("balance", new CassandraColumn("" + lastBalance));
+                hist.addColumn("amount", new CassandraColumn("" + amount));
+                hist.addColumn("currency", new CassandraColumn(account.getColumns().get("limit_ccy").getValue()));
+                hist.addColumn("stmt_date", new CassandraColumn(recordDate.toGMTString()));
+                hist.addColumn("trn_ref_no", new CassandraColumn(UUID.randomUUID().toString()));
+                hist.addColumn("ctpty_no", new CassandraColumn(IBANGenerator.get(df.getNumberText(16))));
+                hist.addColumn("ctpty_name", new CassandraColumn(df.getName()));
             }
             history.add(hist);
         }
