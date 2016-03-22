@@ -18,14 +18,13 @@ It generates following tables:
 ```sh
 mvn exec:java -Dexec.mainClass="tomekkup.sstablegen.App"
 ```
- 5. Enjoy
 
 ### Importing with sstableloader
   1. Check naming of directories containing generated files. Simetimes should be lowercase ! Rename if needed.
   2. Go into dir 'banking'
   3. Execute for every cf :
 ```sh
-sstableloader -d ip banking/cf-name
+sstableloader -d 'your_node_ip' banking/cf-name
 ```
 
 ### Prerequisities
